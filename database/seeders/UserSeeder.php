@@ -2,20 +2,22 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
+class UserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        $this->call([
-            RoleSeeder::class,
-            CategorySeeder::class,
-            UserSeeder::class,
+        User::create([
+            'name' => 'Admin User',
+            'email' => 'admin@tifawinsouk.com',
+            'password' => 'pass',
+            'role_id' => 1,
         ]);
     }
 }
