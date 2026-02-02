@@ -15,7 +15,13 @@ class UserController extends Controller
     public function index()
     {
         $users = User::with('role')->paginate(15);
-        return view('admin.users.index', compact('users'));
+        $columns = [
+            ['name' => 'name', 'label' => 'Name'],
+            ['name' => 'email'],
+            ['name' => 'role.name', 'label' => 'Role'],
+            ['name' => 'created_at', 'label' => 'Created'],
+        ];
+        return view('admin.users.index', compact('users', 'columns'));
     }
 
     /**
@@ -24,7 +30,14 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::pluck('name', 'id');
-        return view('admin.users.create', compact('roles'));
+        $fields = [
+            ['name' => 'name', 'label' => 'Name', 'required' => true],
+            ['name' => 'email', 'label' => 'Email', 'type' => 'email', 'required' => true],
+            ['name' => 'password', 'label' => 'Password', 'type' => 'password', 'required' => true],
+            ['name' => 'password_confirmation', 'label' => 'Confirm Password', 'type' => 'password'],
+            ['name' => 'role_id', 'label' => 'Role', 'type' => 'select', 'options' => $roles, 'required' => true],
+        ];
+        return view('admin.users.create', compact('fields'));
     }
 
     /**
@@ -58,7 +71,14 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $roles = Role::pluck('name', 'id');
-        return view('admin.users.edit', compact('user', 'roles'));
+        $fields = [
+            ['name' => 'name', 'label' => 'Name', 'required' => true],
+            ['name' => 'email', 'label' => 'Email', 'type' => 'email', 'required' => true],
+            ['name' => 'password', 'label' => 'New Password (optional)', 'type' => 'password'],
+            ['name' => 'password_confirmation', 'label' => 'Confirm Password', 'type' => 'password'],
+            ['name' => 'role_id', 'label' => 'Role', 'type' => 'select', 'options' => $roles, 'required' => true],
+        ];
+        return view('admin.users.edit', compact('user', 'fields'));
     }
 
     /**

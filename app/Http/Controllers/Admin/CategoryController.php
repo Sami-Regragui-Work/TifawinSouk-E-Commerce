@@ -14,7 +14,13 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::paginate(15);
-        return view('admin.categories.index', compact('categories'));
+        $columns = [
+            ['name' => 'name', 'label' => 'Name'],
+            ['name' => 'slug'],
+            ['name' => 'description'],
+            ['name' => 'created_at', 'label' => 'Created'],
+        ];
+        return view('admin.categories.index', compact('categories', 'columns'));
     }
 
     /**
@@ -22,7 +28,12 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('admin.categories.create');
+        $fields = [
+            ['name' => 'name', 'label' => 'Name', 'required' => true],
+            ['name' => 'slug', 'label' => 'Slug', 'required' => true],
+            ['name' => 'description', 'type' => 'textarea'],
+        ];
+        return view('admin.categories.create', compact('fields'));
     }
 
     /**
@@ -54,7 +65,12 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        return view('admin.categories.edit', compact('category'));
+        $fields = [
+            ['name' => 'name', 'label' => 'Name', 'required' => true],
+            ['name' => 'slug', 'label' => 'Slug', 'required' => true],
+            ['name' => 'description', 'type' => 'textarea'],
+        ];
+        return view('admin.categories.edit', compact('category', 'fields'));
     }
 
     /**
@@ -64,7 +80,7 @@ class CategoryController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'slug' => 'required|string|unique:categories,slug,' . $category->id . ',id',
+            'slug' => 'required|string|max:255|unique:categories,slug,' . $category->id,
             'description' => 'nullable|string'
         ]);
 
