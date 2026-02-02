@@ -13,7 +13,8 @@ class User extends Model
 
     protected static function boot()
     {
-        return parent::boot();
+        parent::boot();
+        
         static::creating(fn($user) => $user->password = Hash::make($user->password));
         static::updating(function ($user) {
             if ($user->isDirty('password')) $user->password = Hash::make($user->password);
